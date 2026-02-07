@@ -1,7 +1,7 @@
 import logging
-from fastapi import FastAPI
+from fastapi import FastAPI # type: ignore
 from sqlalchemy import text
-from app.database import engine
+from app.database import engine, init_db
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("app")

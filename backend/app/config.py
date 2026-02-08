@@ -26,3 +26,16 @@ def get_database_url() -> str:
         raise RuntimeError(f"Missing env vars: {', '.join(missing)}")
 
     return f"postgresql+psycopg2://{user}:{password}@{host}:{port}/{db}"
+
+def get_jwt_secret() -> str:
+    secret= os.getenv("JWT_SECRET_KEY")
+    if not secret:
+        raise RuntimeError("JWT secret is missing")
+    return secret
+
+def get_jwt_expires_minutes() -> int:
+    raw = os.getenv("JWT_EXPIRES_MINUTES", "60")
+    try:
+        return int(raw)
+    except ValueError:
+        raise RuntimeError(f"Invalid JWT_EXPIRES_MINUTES: {raw} is not an integer")

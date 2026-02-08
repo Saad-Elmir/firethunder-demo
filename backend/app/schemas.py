@@ -5,8 +5,16 @@ from decimal import Decimal
 class UserCreate(BaseModel):
     username: str = Field(min_length=3)
     email: EmailStr
-    password_hash: str = Field(min_length=1)
+    password: str = Field(min_length=8, max_length=72)  # password plaintext ONLY in request
     role: Literal["ADMIN", "USER"]
+
+class UserLogin(BaseModel):
+    username: str
+    password: str
+
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
 
 class ProductCreate(BaseModel):
     name: str = Field(min_length=2)

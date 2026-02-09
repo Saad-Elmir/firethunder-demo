@@ -1,14 +1,21 @@
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict
 
-from jose import jwt
-from passlib.context import CryptContext
+from jose import jwt  # type: ignore
+from jose import JWTError  # type: ignore
+from passlib.context import CryptContext   # type: ignore
 
 from app.config import get_jwt_secret, get_jwt_expires_minutes
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 JWT_ALGORITHM = "HS256"
 
+def decode_token(token: str) -> dict:
+    secret = get_jwt_secret()  # fails clearly if missing
+    try:
+        return jwt.decode(token, secret, algorithms=[JWT_ALGORITHM])
+    except JWTError:
+        raise ValueError("Unauthorized")
 
 
 def hash_password(password: str) -> str:

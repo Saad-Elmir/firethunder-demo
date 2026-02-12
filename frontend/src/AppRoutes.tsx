@@ -1,6 +1,8 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import ProductsPage from "./pages/ProductsPage";
+import ProductNewPage from "./pages/ProductNewPage";
+import ProductEditPage from "./pages/ProductEditPage";
 import RequireAuth from "./routes/RequireAuth";
 import { isAuthed } from "./auth";
 
@@ -8,6 +10,7 @@ export default function AppRoutes() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
+
       <Route
         path="/products"
         element={
@@ -16,8 +19,28 @@ export default function AppRoutes() {
           </RequireAuth>
         }
       />
+
+      <Route
+        path="/products/new"
+        element={
+          <RequireAuth>
+            <ProductNewPage />
+          </RequireAuth>
+        }
+      />
+
+      <Route
+        path="/products/:id/edit"
+        element={
+          <RequireAuth>
+            <ProductEditPage />
+          </RequireAuth>
+        }
+      />
+
       <Route path="/" element={<Navigate to={isAuthed() ? "/products" : "/login"} replace />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }
+

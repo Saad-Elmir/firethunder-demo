@@ -6,13 +6,16 @@ import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 import { ApolloProvider } from "@apollo/client/react";
 import { apolloClient } from "./apollo/client";
+import { AppThemeProvider } from "./theme";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ApolloProvider client={apolloClient}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <AppThemeProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </AppThemeProvider>
     </ApolloProvider>
   </React.StrictMode>
 );

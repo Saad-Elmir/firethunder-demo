@@ -4,6 +4,7 @@ import ProductsPage from "./pages/ProductsPage";
 import ProductNewPage from "./pages/ProductNewPage";
 import ProductEditPage from "./pages/ProductEditPage";
 import RequireAuth from "./routes/RequireAuth";
+import ProtectedLayout from "./layout/ProtectedLayout";
 import { isAuthed } from "./auth";
 
 export default function AppRoutes() {
@@ -11,36 +12,21 @@ export default function AppRoutes() {
     <Routes>
       <Route path="/login" element={<LoginPage />} />
 
+      {/* Protected area: layout commun pour toutes les pages protégées */}
       <Route
-        path="/products"
         element={
           <RequireAuth>
-            <ProductsPage />
+            <ProtectedLayout />
           </RequireAuth>
         }
-      />
-
-      <Route
-        path="/products/new"
-        element={
-          <RequireAuth>
-            <ProductNewPage />
-          </RequireAuth>
-        }
-      />
-
-      <Route
-        path="/products/:id/edit"
-        element={
-          <RequireAuth>
-            <ProductEditPage />
-          </RequireAuth>
-        }
-      />
+      >
+        <Route path="/products" element={<ProductsPage />} />
+        <Route path="/products/new" element={<ProductNewPage />} />
+        <Route path="/products/:id/edit" element={<ProductEditPage />} />
+      </Route>
 
       <Route path="/" element={<Navigate to={isAuthed() ? "/products" : "/login"} replace />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }
-

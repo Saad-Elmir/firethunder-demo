@@ -1,3 +1,5 @@
+import LightModeIcon from "@mui/icons-material/LightMode";
+import Tooltip from "@mui/material/Tooltip";
 import { useState } from "react";
 import {
   AppBar,
@@ -63,6 +65,16 @@ export default function ProtectedLayout() {
           <Typography variant="body2" sx={{ opacity: 0.9 }}>
             {lang.toUpperCase()} • {mode.toUpperCase()}
           </Typography>
+          <Typography variant="body2" sx={{ opacity: 0.9, mr: 1 }}>
+            {lang.toUpperCase()}
+          </Typography>
+
+          <Tooltip title={mode === "dark" ? "Light mode" : "Dark mode"}>
+            <IconButton color="inherit" onClick={toggleMode}>
+               {mode === "dark" ? <LightModeIcon /> : <DarkModeIcon />}
+            </IconButton>
+          </Tooltip>
+
         </Toolbar>
       </AppBar>
 

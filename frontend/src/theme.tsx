@@ -18,9 +18,10 @@ export function useAppTheme() {
 }
 
 export function AppThemeProvider({ children }: { children: React.ReactNode }) {
-  const [mode, setMode] = useState<ThemeMode>(
-    (localStorage.getItem("theme") as ThemeMode) || "light"
-  );
+  const [mode, setMode] = useState<ThemeMode>(() => {
+  const saved = localStorage.getItem("theme");
+  return saved === "dark" || saved === "light" ? saved : "light";
+});
 
   const toggleMode = () => {
     setMode((prev) => {

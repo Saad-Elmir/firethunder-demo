@@ -1,19 +1,15 @@
-import { useMemo, useState } from "react";
-import { Container, Typography, TextField, Button, Alert, Snackbar, Stack } from "@mui/material";
+import { useMemo } from "react";
+import { Container, Typography, TextField, Button, Stack, Alert } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { gql } from "@apollo/client";
 import { useMutation } from "@apollo/client/react";
+import { useTranslation } from "react-i18next";
+
 import { setToken } from "../auth";
-
-const loginSchema = z.object({
-  username: z.string().min(1, "Username required"),
-  password: z.string().min(1, "Password required"),
-});
-
-type LoginForm = z.infer<typeof loginSchema>;
+import { useToast } from "../ui/toast";
 
 const LOGIN_MUTATION = gql`
   mutation Login($username: String!, $password: String!) {
@@ -32,9 +28,27 @@ type LoginData = {
   login: { token: string; user: { id: string; username: string; role: string } };
 };
 
+type LoginVars = {
+  username: string;
+  password: string;
+};
+
 export default function LoginPage() {
   const navigate = useNavigate();
-  const [toast, setToast] = useState<{ open: boolean; msg: string }>({ open: false, msg: "" });
+  const { t } = useTranslation();
+  const { showToast } = useToast();
+
+  // ✅ schema avec messages traduits
+  const loginSchema = useMemo(
+    () =>
+      z.object({
+        username: z.string().min(1, t("validation.usernameRequired")),
+        password: z.string().min(6, t("validation.passwordMin")),
+      }),
+    [t]
+  );
+
+  type LoginForm = z.infer<typeof loginSchema>;
 
   const {
     register,
@@ -46,7 +60,7 @@ export default function LoginPage() {
     defaultValues: { username: "", password: "" },
   });
 
-  const [loginMutation, { loading }] = useMutation<LoginData>(LOGIN_MUTATION);
+  const [loginMutation, { loading }] = useMutation<LoginData, LoginVars>(LOGIN_MUTATION);
 
   const disabled = useMemo(() => !isValid || isSubmitting || loading, [isValid, isSubmitting, loading]);
 
@@ -56,7 +70,7 @@ export default function LoginPage() {
 
       const token = res.data?.login?.token;
       if (!token) {
-        setToast({ open: true, msg: "Server unreachable" });
+        showToast(t("toast.serverUnreachable"), "error");
         return;
       }
 
@@ -65,7 +79,7 @@ export default function LoginPage() {
     } catch (e: any) {
       const msg = String(e?.message ?? "").toLowerCase();
 
-      // cas réseau
+      // ✅ cas réseau
       if (
         msg.includes("failed to fetch") ||
         msg.includes("fetch failed") ||
@@ -73,28 +87,28 @@ export default function LoginPage() {
         msg.includes("econnrefused") ||
         msg.includes("server unreachable")
       ) {
-        setToast({ open: true, msg: "Server unreachable" });
+        showToast(t("toast.serverUnreachable"), "error");
         return;
       }
 
-      // cas invalid credentials (message exact côté backend)
+      // ✅ invalid credentials (message backend)
       if (msg.includes("invalid credentials")) {
-        setToast({ open: true, msg: "Invalid credentials" });
+        showToast(t("toast.invalidCredentials"), "error");
         return;
       }
 
       // fallback
-      setToast({ open: true, msg: "Invalid credentials" });
+      showToast(t("toast.invalidCredentials"), "error");
     }
   };
 
   return (
     <Container sx={{ py: 6, maxWidth: 520 }}>
       <Stack spacing={2}>
-        <Typography variant="h5">Login</Typography>
+        <Typography variant="h5">{t("auth.login")}</Typography>
 
         <TextField
-          label="Username"
+          label={t("auth.username")}
           fullWidth
           {...register("username")}
           error={!!errors.username}
@@ -102,7 +116,7 @@ export default function LoginPage() {
         />
 
         <TextField
-          label="Password"
+          label={t("auth.password")}
           type="password"
           fullWidth
           {...register("password")}
@@ -111,18 +125,15 @@ export default function LoginPage() {
         />
 
         <Button variant="contained" disabled={disabled} onClick={handleSubmit(onSubmit)}>
-          {loading ? "Loading..." : "Sign in"}
+          {loading ? "..." : t("auth.submit")}
         </Button>
 
-        {!isValid && <Alert severity="info">Veuillez remplir les champs requis.</Alert>}
+        {!isValid && (
+          <Alert severity="info">
+            {t("validation.usernameRequired")} / {t("validation.passwordMin")}
+          </Alert>
+        )}
       </Stack>
-
-      <Snackbar
-        open={toast.open}
-        autoHideDuration={2500}
-        onClose={() => setToast({ open: false, msg: "" })}
-        message={toast.msg}
-      />
     </Container>
   );
 }

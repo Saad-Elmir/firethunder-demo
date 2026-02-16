@@ -27,23 +27,23 @@ import { PRODUCTS_QUERY, DELETE_PRODUCT_MUTATION } from "../graphql/products";
 import { useToast } from "../ui/toast";
 import { isForbidden, isUnauthorized } from "../graphql/errors";
 import { clearToken } from "../auth";
+import { useTranslation } from "react-i18next";
 
-// string type for price
 type Product = {
   id: string;
   name: string;
-  price: string;
+  price: string; // backend renvoie string
   quantity: number;
 };
 
 type ProductsData = { products: Product[] };
-
 type DeleteVars = { id: string };
 type DeleteData = { deleteProduct: boolean };
 
 export default function ProductsPage() {
   const navigate = useNavigate();
   const { showToast } = useToast();
+  const { t } = useTranslation();
 
   const [toDelete, setToDelete] = useState<Product | null>(null);
 
@@ -51,7 +51,6 @@ export default function ProductsPage() {
     fetchPolicy: "no-cache",
   });
 
-  // ✅ Gestion safe des erreurs query
   useEffect(() => {
     if (!error) return;
     const msg = error.message || "";
@@ -60,10 +59,12 @@ export default function ProductsPage() {
       navigate("/login", { replace: true });
       return;
     }
-    showToast("Failed to load products", "error");
-  }, [error, navigate, showToast]);
+    showToast(t("toast.failedLoadProducts"), "error");
+  }, [error, navigate, showToast, t]);
 
-  const [deleteProduct, { loading: deleting }] = useMutation<DeleteData, DeleteVars>(DELETE_PRODUCT_MUTATION);
+  const [deleteProduct, { loading: deleting }] = useMutation<DeleteData, DeleteVars>(
+    DELETE_PRODUCT_MUTATION
+  );
 
   const products = useMemo(() => data?.products ?? [], [data]);
 
@@ -72,7 +73,7 @@ export default function ProductsPage() {
 
     try {
       await deleteProduct({ variables: { id: toDelete.id } });
-      showToast("Product deleted", "success");
+      showToast(t("toast.productDeleted"), "success");
       setToDelete(null);
       await refetch();
     } catch (e: any) {
@@ -85,11 +86,11 @@ export default function ProductsPage() {
       }
 
       if (isForbidden(msg)) {
-        showToast("You are not allowed to delete products", "error");
+        showToast(t("toast.notAllowedDelete"), "error");
         return;
       }
 
-      showToast("Failed to load products", "error");
+      showToast(t("toast.failedLoadProducts"), "error");
     }
   };
 
@@ -98,13 +99,12 @@ export default function ProductsPage() {
       <Container sx={{ py: 4 }}>
         <Stack direction="row" spacing={2} alignItems="center">
           <CircularProgress size={22} />
-          <Typography>Loading...</Typography>
+          <Typography>{t("common.loading") ?? "Loading..."}</Typography>
         </Stack>
       </Container>
     );
   }
 
-  // S'il y a une erreur, le toast est déjà géré via useEffect
   if (error && !data) {
     return (
       <Container sx={{ py: 4 }}>
@@ -116,27 +116,23 @@ export default function ProductsPage() {
   return (
     <Container sx={{ py: 4 }}>
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
-        <Typography variant="h5">Products</Typography>
-        <Button variant="contained" startIcon={<AddIcon />} onClick={() => navigate("/products/new")}>
-          New
+        <Typography variant="h5">{t("products.title")}</Typography>
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={() => navigate("/products/new")}
+        >
+          {t("products.new")}
         </Button>
       </Stack>
 
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>
-              <b>Name</b>
-            </TableCell>
-            <TableCell>
-              <b>Price</b>
-            </TableCell>
-            <TableCell>
-              <b>Quantity</b>
-            </TableCell>
-            <TableCell align="right">
-              <b>Actions</b>
-            </TableCell>
+            <TableCell><b>{t("products.name")}</b></TableCell>
+            <TableCell><b>{t("products.price")}</b></TableCell>
+            <TableCell><b>{t("products.quantity")}</b></TableCell>
+            <TableCell align="right"><b>{t("products.actions")}</b></TableCell>
           </TableRow>
         </TableHead>
 
@@ -147,10 +143,16 @@ export default function ProductsPage() {
               <TableCell>{Number(p.price).toFixed(2)}</TableCell>
               <TableCell>{p.quantity}</TableCell>
               <TableCell align="right">
-                <IconButton onClick={() => navigate(`/products/${p.id}/edit`)}>
+                <IconButton
+                  aria-label={t("buttons.edit")}
+                  onClick={() => navigate(`/products/${p.id}/edit`)}
+                >
                   <EditIcon />
                 </IconButton>
-                <IconButton onClick={() => setToDelete(p)}>
+                <IconButton
+                  aria-label={t("buttons.delete")}
+                  onClick={() => setToDelete(p)}
+                >
                   <DeleteIcon />
                 </IconButton>
               </TableCell>
@@ -159,23 +161,28 @@ export default function ProductsPage() {
 
           {products.length === 0 && (
             <TableRow>
-              <TableCell colSpan={4}>No products yet.</TableCell>
+              <TableCell colSpan={4}>{t("products.noProducts")}</TableCell>
             </TableRow>
           )}
         </TableBody>
       </Table>
 
       <Dialog open={!!toDelete} onClose={() => setToDelete(null)}>
-        <DialogTitle>Confirm deletion</DialogTitle>
+        <DialogTitle>{t("products.confirmDeletionTitle")}</DialogTitle>
         <DialogContent>
-          <DialogContentText>Are you sure you want to delete this product?</DialogContentText>
+          <DialogContentText>{t("products.confirmDeletionMessage")}</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setToDelete(null)} disabled={deleting}>
-            Cancel
+            {t("buttons.cancel")}
           </Button>
-          <Button variant="contained" color="error" disabled={deleting} onClick={confirmDelete}>
-            Delete
+          <Button
+            variant="contained"
+            color="error"
+            disabled={deleting}
+            onClick={confirmDelete}
+          >
+            {t("buttons.delete")}
           </Button>
         </DialogActions>
       </Dialog>

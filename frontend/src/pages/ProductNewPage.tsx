@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Container, Typography, TextField, Button, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -5,21 +6,21 @@ import type { SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@apollo/client/react";
+import { useTranslation } from "react-i18next";
 
 import { CREATE_PRODUCT_MUTATION } from "../graphql/products";
 import { useToast } from "../ui/toast";
 import { isUnauthorized } from "../graphql/errors";
 import { clearToken } from "../auth";
 
-// ✅ Ici on attend directement des numbers (pas de coerce)
-const schema = z.object({
-  name: z.string().min(2, "name required, min 2 chars"),
+const CreateVarsSchema = z.object({
+  name: z.string().min(2),
   description: z.string().optional(),
-  price: z.number().min(0, "price must be >= 0"),
-  quantity: z.number().int().min(0, "quantity must be >= 0"),
+  price: z.number().min(0),
+  quantity: z.number().int().min(0),
 });
 
-type FormValues = z.infer<typeof schema>;
+type FormValues = z.infer<typeof CreateVarsSchema>;
 
 type CreateVars = {
   input: {
@@ -35,6 +36,19 @@ type CreateData = { createProduct: { id: string } };
 export default function ProductNewPage() {
   const navigate = useNavigate();
   const { showToast } = useToast();
+  const { t } = useTranslation();
+
+  // ✅ schema avec messages traduits
+  const schema = useMemo(
+    () =>
+      z.object({
+        name: z.string().min(2, t("validation.nameMin2")),
+        description: z.string().optional(),
+        price: z.number().min(0, t("validation.priceGte0")),
+        quantity: z.number().int().min(0, t("validation.qtyGte0")),
+      }),
+    [t]
+  );
 
   const {
     register,
@@ -46,7 +60,6 @@ export default function ProductNewPage() {
     defaultValues: { name: "", description: "", price: 0, quantity: 0 },
   });
 
-  // ✅ Pas de onError/onCompleted dans options (typing + contrôle via try/catch)
   const [createProduct, { loading }] = useMutation<CreateData, CreateVars>(CREATE_PRODUCT_MUTATION);
 
   const onSubmit: SubmitHandler<FormValues> = async (values) => {
@@ -55,35 +68,35 @@ export default function ProductNewPage() {
         variables: {
           input: {
             name: values.name,
-            description: values.description ? values.description : null,
+            description: values.description?.trim() ? values.description.trim() : null,
             price: values.price,
             quantity: values.quantity,
           },
         },
       });
 
-      showToast("Product created successfully", "success");
+      showToast(t("toast.productCreated"), "success");
       navigate("/products", { replace: true });
     } catch (e: any) {
-      const msg = e?.message || "";
+      const msg = String(e?.message ?? "");
       if (isUnauthorized(msg)) {
         clearToken();
         navigate("/login", { replace: true });
         return;
       }
-      showToast("Create product failed", "error");
+      showToast(t("toast.createProductFailed"), "error");
     }
   };
 
   return (
     <Container sx={{ py: 4, maxWidth: 640 }}>
       <Typography variant="h5" sx={{ mb: 2 }}>
-        New Product
+        {t("products.newTitle")}
       </Typography>
 
       <Stack spacing={2}>
         <TextField
-          label="Name"
+          label={t("products.name")}
           {...register("name")}
           error={!!errors.name}
           helperText={errors.name?.message}
@@ -98,37 +111,31 @@ export default function ProductNewPage() {
           helperText={errors.description?.message}
         />
 
-        {/* ✅ valueAsNumber pour fournir un number au resolver */}
         <TextField
-          label="Price"
+          label={t("products.price")}
           type="number"
+          inputProps={{ min: 0, step: "0.01" }}
           {...register("price", { valueAsNumber: true })}
           error={!!errors.price}
           helperText={errors.price?.message}
         />
 
         <TextField
-          label="Quantity"
+          label={t("products.quantity")}
           type="number"
+          inputProps={{ min: 0, step: "1" }}
           {...register("quantity", { valueAsNumber: true })}
           error={!!errors.quantity}
           helperText={errors.quantity?.message}
         />
 
         <Stack direction="row" spacing={2}>
-          <Button
-            variant="outlined"
-            onClick={() => navigate("/products")}
-            disabled={loading || isSubmitting}
-          >
-            Cancel
+          <Button variant="outlined" onClick={() => navigate("/products")} disabled={loading || isSubmitting}>
+            {t("buttons.cancel")}
           </Button>
-          <Button
-            variant="contained"
-            onClick={handleSubmit(onSubmit)}
-            disabled={!isValid || loading || isSubmitting}
-          >
-            Create
+
+          <Button variant="contained" onClick={handleSubmit(onSubmit)} disabled={!isValid || loading || isSubmitting}>
+            {t("buttons.create")}
           </Button>
         </Stack>
       </Stack>

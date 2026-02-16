@@ -1,0 +1,59 @@
+{
+  "app": { "title": "FireThunder Demo" },
+  "menu": {
+    "products": "Products",
+    "themeSwitch": "Theme switch",
+    "languageSwitch": "Language switch",
+    "logout": "Logout",
+    "current": "Current"
+  },
+  "auth": {
+    "login": "Login",
+    "username": "Username",
+    "password": "Password",
+    "submit": "Sign in"
+  },
+  "products": {
+    "title": "Products",
+    "new": "New",
+    "name": "Name",
+    "price": "Price",
+    "quantity": "Quantity",
+    "description": "Description",
+    "actions": "Actions",
+    "noProducts": "No products yet.",
+    "newTitle": "New Product",
+    "editTitle": "Edit Product",
+    "notFound": "Product not found",
+    "confirmDeletionTitle": "Confirm deletion",
+    "confirmDeletionMessage": "Are you sure you want to delete this product?"
+  },
+  "buttons": {
+    "create": "Create",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "back": "Back"
+  },
+  "toast": {
+    "invalidCredentials": "Invalid credentials",
+    "serverUnreachable": "Server unreachable",
+    "failedLoadProducts": "Failed to load products",
+    "createProductFailed": "Create product failed",
+    "updateFailed": "Update failed",
+    "productCreated": "Product created successfully",
+    "productUpdated": "Product updated successfully",
+    "productDeleted": "Product deleted",
+    "notAllowedDelete": "You are not allowed to delete products"
+  },
+  "validation": {
+    "usernameRequired": "username required",
+    "emailRequired": "email required",
+    "passwordMin": "password required (min 6)",
+    "nameMin2": "name required, min 2 chars",
+    "priceGte0": "price must be >= 0",
+    "qtyGte0": "quantity must be >= 0"
+  },
+  "common": { "loading": "Loading..." }
+}

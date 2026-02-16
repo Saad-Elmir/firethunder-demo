@@ -1,0 +1,60 @@
+{
+  "app": { "title": "FireThunder Demo" },
+  "menu": {
+    "products": "Produits",
+    "themeSwitch": "Thème",
+    "languageSwitch": "Langue",
+    "logout": "Déconnexion",
+    "current": "Actuel"
+  },
+  "auth": {
+    "login": "Connexion",
+    "username": "Nom d'utilisateur",
+    "password": "Mot de passe",
+    "submit": "Se connecter"
+  },
+  "products": {
+    "title": "Produits",
+    "new": "Nouveau",
+    "name": "Nom",
+    "price": "Prix",
+    "quantity": "Quantité",
+    "description": "Description",
+    "actions": "Actions",
+    "noProducts": "Aucun produit pour le moment.",
+    "newTitle": "Nouveau produit",
+    "editTitle": "Modifier le produit",
+    "notFound": "Produit introuvable",
+    "confirmDeletionTitle": "Confirmer la suppression",
+    "confirmDeletionMessage": "Êtes-vous sûr de vouloir supprimer ce produit ?"
+  },
+  "buttons": {
+    "create": "Créer",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "back": "Retour"
+  },
+  "toast": {
+    "invalidCredentials": "Identifiants invalides",
+    "serverUnreachable": "Serveur injoignable",
+    "failedLoadProducts": "Impossible de charger les produits",
+    "createProductFailed": "Échec de création du produit",
+    "updateFailed": "Échec de mise à jour",
+    "productCreated": "Produit créé avec succès",
+    "productUpdated": "Produit mis à jour avec succès",
+    "productDeleted": "Produit supprimé",
+    "notAllowedDelete": "Vous n'êtes pas autorisé à supprimer des produits"
+  },
+  "validation": {
+    "usernameRequired": "nom d'utilisateur requis",
+    "emailRequired": "email requis",
+    "passwordMin": "mot de passe requis (min 6)",
+    "nameMin2": "nom requis (min 2 caractères)",
+    "priceGte0": "le prix doit être ≥ 0",
+    "qtyGte0": "la quantité doit être ≥ 0"
+  },
+  "common": { "loading": "Chargement..." }
+
+}

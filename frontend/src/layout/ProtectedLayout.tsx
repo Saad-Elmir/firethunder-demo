@@ -1,5 +1,3 @@
-import LightModeIcon from "@mui/icons-material/LightMode";
-import Tooltip from "@mui/material/Tooltip";
 import { useState } from "react";
 import {
   AppBar,
@@ -15,23 +13,31 @@ import {
   Box,
   Switch,
 } from "@mui/material";
+import Tooltip from "@mui/material/Tooltip";
+
 import MenuIcon from "@mui/icons-material/Menu";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
 import LogoutIcon from "@mui/icons-material/Logout";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
+import LightModeIcon from "@mui/icons-material/LightMode";
 import LanguageIcon from "@mui/icons-material/Language";
 
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+
 import { clearToken } from "../auth";
 import { useAppTheme } from "../theme";
-import { getLang, toggleLang } from "../i18n";
+import { getLang, setLang } from "../i18n";
 
 export default function ProtectedLayout() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+
+  const { t } = useTranslation();
   const { mode, toggleMode } = useAppTheme();
-  const [lang, setLang] = useState(getLang());
+
+  const lang = getLang().toUpperCase();
 
   const go = (path: string) => {
     navigate(path);
@@ -44,8 +50,8 @@ export default function ProtectedLayout() {
   };
 
   const onToggleLang = () => {
-    const next = toggleLang();
-    setLang(next);
+    const next = getLang() === "fr" ? "en" : "fr";
+    setLang(next); // ✅ localStorage + i18n.changeLanguage
   };
 
   const isProducts = location.pathname.startsWith("/products");
@@ -54,27 +60,28 @@ export default function ProtectedLayout() {
     <Box sx={{ minHeight: "100vh" }}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton color="inherit" edge="start" onClick={() => setOpen(true)} sx={{ mr: 2 }}>
+          <IconButton
+            color="inherit"
+            edge="start"
+            onClick={() => setOpen(true)}
+            sx={{ mr: 2 }}
+          >
             <MenuIcon />
           </IconButton>
 
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            FireThunder Demo
+            {t("app.title")}
           </Typography>
 
-          <Typography variant="body2" sx={{ opacity: 0.9 }}>
-            {lang.toUpperCase()} • {mode.toUpperCase()}
-          </Typography>
           <Typography variant="body2" sx={{ opacity: 0.9, mr: 1 }}>
-            {lang.toUpperCase()}
+            {lang}
           </Typography>
 
           <Tooltip title={mode === "dark" ? "Light mode" : "Dark mode"}>
             <IconButton color="inherit" onClick={toggleMode}>
-               {mode === "dark" ? <LightModeIcon /> : <DarkModeIcon />}
+              {mode === "dark" ? <LightModeIcon /> : <DarkModeIcon />}
             </IconButton>
           </Tooltip>
-
         </Toolbar>
       </AppBar>
 
@@ -85,7 +92,7 @@ export default function ProtectedLayout() {
               <ListItemIcon>
                 <Inventory2Icon />
               </ListItemIcon>
-              <ListItemText primary="Products" />
+              <ListItemText primary={t("menu.products")} />
             </ListItemButton>
 
             <Divider sx={{ my: 1 }} />
@@ -94,7 +101,7 @@ export default function ProtectedLayout() {
               <ListItemIcon>
                 <DarkModeIcon />
               </ListItemIcon>
-              <ListItemText primary="Theme switch" />
+              <ListItemText primary={t("menu.themeSwitch")} />
               <Switch edge="end" checked={mode === "dark"} />
             </ListItemButton>
 
@@ -102,7 +109,10 @@ export default function ProtectedLayout() {
               <ListItemIcon>
                 <LanguageIcon />
               </ListItemIcon>
-              <ListItemText primary="Language switch" secondary={`Current: ${lang.toUpperCase()}`} />
+              <ListItemText
+                primary={t("menu.languageSwitch")}
+                secondary={`${t("menu.current")}: ${lang}`}
+              />
             </ListItemButton>
 
             <Divider sx={{ my: 1 }} />
@@ -111,7 +121,7 @@ export default function ProtectedLayout() {
               <ListItemIcon>
                 <LogoutIcon />
               </ListItemIcon>
-              <ListItemText primary="Logout" />
+              <ListItemText primary={t("menu.logout")} />
             </ListItemButton>
           </List>
         </Box>

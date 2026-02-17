@@ -38,7 +38,7 @@ export default function LoginPage() {
   const { t } = useTranslation();
   const { showToast } = useToast();
 
-  // ✅ schema avec messages traduits
+  //  schema avec messages traduits
   const loginSchema = useMemo(
     () =>
       z.object({
@@ -79,7 +79,7 @@ export default function LoginPage() {
     } catch (e: any) {
       const msg = String(e?.message ?? "").toLowerCase();
 
-      // ✅ cas réseau
+      //  cas réseau
       if (
         msg.includes("failed to fetch") ||
         msg.includes("fetch failed") ||
@@ -91,7 +91,7 @@ export default function LoginPage() {
         return;
       }
 
-      // ✅ invalid credentials (message backend)
+      // invalid credentials (message backend)
       if (msg.includes("invalid credentials")) {
         showToast(t("toast.invalidCredentials"), "error");
         return;

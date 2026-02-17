@@ -39,7 +39,7 @@ test("renders app title in protected layout when authed", () => {
 test("redirects to login when not authed", () => {
   renderApp("/products");
 
-  // Ta page login affiche un <Typography variant="h5">Login</Typography>
+  // page login affiche un <Typography variant="h5">Login</Typography>
   expect(screen.getByText("Login")).toBeInTheDocument();
 });
 

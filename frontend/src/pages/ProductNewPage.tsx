@@ -38,7 +38,7 @@ export default function ProductNewPage() {
   const { showToast } = useToast();
   const { t } = useTranslation();
 
-  // ✅ schema avec messages traduits
+  //  schema avec messages traduits
   const schema = useMemo(
     () =>
       z.object({

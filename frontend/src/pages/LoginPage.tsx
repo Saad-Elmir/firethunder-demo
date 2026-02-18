@@ -1,5 +1,14 @@
 import { useMemo } from "react";
-import { Container, Typography, TextField, Button, Stack, Alert } from "@mui/material";
+import {
+  Box,
+  Container,
+  Typography,
+  TextField,
+  Button,
+  Stack,
+  Alert,
+  Paper,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -38,7 +47,6 @@ export default function LoginPage() {
   const { t } = useTranslation();
   const { showToast } = useToast();
 
-  //  schema avec messages traduits
   const loginSchema = useMemo(
     () =>
       z.object({
@@ -62,7 +70,10 @@ export default function LoginPage() {
 
   const [loginMutation, { loading }] = useMutation<LoginData, LoginVars>(LOGIN_MUTATION);
 
-  const disabled = useMemo(() => !isValid || isSubmitting || loading, [isValid, isSubmitting, loading]);
+  const disabled = useMemo(
+    () => !isValid || isSubmitting || loading,
+    [isValid, isSubmitting, loading]
+  );
 
   const onSubmit = async (values: LoginForm) => {
     try {
@@ -79,7 +90,6 @@ export default function LoginPage() {
     } catch (e: any) {
       const msg = String(e?.message ?? "").toLowerCase();
 
-      //  cas réseau
       if (
         msg.includes("failed to fetch") ||
         msg.includes("fetch failed") ||
@@ -91,49 +101,74 @@ export default function LoginPage() {
         return;
       }
 
-      // invalid credentials (message backend)
       if (msg.includes("invalid credentials")) {
         showToast(t("toast.invalidCredentials"), "error");
         return;
       }
 
-      // fallback
       showToast(t("toast.invalidCredentials"), "error");
     }
   };
 
   return (
-    <Container sx={{ py: 6, maxWidth: 520 }}>
-      <Stack spacing={2}>
-        <Typography variant="h5">{t("auth.login")}</Typography>
+    <Box
+      sx={{
+        minHeight: "100vh",
+        display: "grid",
+        placeItems: "center",
+        px: 2,
+      }}
+    >
+      <Container maxWidth="sm">
+        <Paper
+          elevation={6}
+          sx={{
+            mx: "auto",
+            maxWidth: 520,
+            p: { xs: 3, sm: 4 },
+            borderRadius: 3,
+          }}
+        >
+          <Stack spacing={2}>
+            <Typography variant="h5" fontWeight={700}>
+              {t("auth.login")}
+            </Typography>
 
-        <TextField
-          label={t("auth.username")}
-          fullWidth
-          {...register("username")}
-          error={!!errors.username}
-          helperText={errors.username?.message}
-        />
+            <TextField
+              label={t("auth.username")}
+              fullWidth
+              {...register("username")}
+              error={!!errors.username}
+              helperText={errors.username?.message}
+            />
 
-        <TextField
-          label={t("auth.password")}
-          type="password"
-          fullWidth
-          {...register("password")}
-          error={!!errors.password}
-          helperText={errors.password?.message}
-        />
+            <TextField
+              label={t("auth.password")}
+              type="password"
+              fullWidth
+              {...register("password")}
+              error={!!errors.password}
+              helperText={errors.password?.message}
+            />
 
-        <Button variant="contained" disabled={disabled} onClick={handleSubmit(onSubmit)}>
-          {loading ? "..." : t("auth.submit")}
-        </Button>
+            <Button
+              variant="contained"
+              fullWidth
+              size="large"
+              disabled={disabled}
+              onClick={handleSubmit(onSubmit)}
+            >
+              {loading ? "..." : t("auth.submit")}
+            </Button>
 
-        {!isValid && (
-          <Alert severity="info">
-            {t("validation.usernameRequired")} / {t("validation.passwordMin")}
-          </Alert>
-        )}
-      </Stack>
-    </Container>
+            {!isValid && (
+              <Alert severity="info">
+                {t("validation.usernameRequired")} / {t("validation.passwordMin")}
+              </Alert>
+            )}
+          </Stack>
+        </Paper>
+      </Container>
+    </Box>
   );
 }

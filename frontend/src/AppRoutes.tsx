@@ -12,7 +12,7 @@ export default function AppRoutes() {
     <Routes>
       <Route path="/login" element={<LoginPage />} />
 
-      {/* Protected area: layout commun pour toutes les pages protégées */}
+      {/* Protected area: Commun Layout*/}
       <Route
         element={
           <RequireAuth>

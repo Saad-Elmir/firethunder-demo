@@ -16,6 +16,9 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  Box,
+  Paper,
+  TableContainer,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -94,78 +97,85 @@ export default function ProductsPage() {
     }
   };
 
+  //  Container full width + contenu centré large
+  const PageShell = ({ children }: { children: React.ReactNode }) => (
+    <Container maxWidth={false} disableGutters sx={{ py: 4, px: 3 }}>
+      <Box sx={{ width: "100%", maxWidth: 1100, mx: "auto" }}>{children}</Box>
+    </Container>
+  );
+
   if (loading) {
     return (
-      <Container sx={{ py: 4 }}>
+      <PageShell>
         <Stack direction="row" spacing={2} alignItems="center">
           <CircularProgress size={22} />
           <Typography>{t("common.loading") ?? "Loading..."}</Typography>
         </Stack>
-      </Container>
+      </PageShell>
     );
   }
 
   if (error && !data) {
     return (
-      <Container sx={{ py: 4 }}>
+      <PageShell>
         <Typography>—</Typography>
-      </Container>
+      </PageShell>
     );
   }
 
   return (
-    <Container sx={{ py: 4 }}>
+    <PageShell>
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
         <Typography variant="h5">{t("products.title")}</Typography>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={() => navigate("/products/new")}
-        >
+        <Button variant="contained" startIcon={<AddIcon />} onClick={() => navigate("/products/new")}>
           {t("products.new")}
         </Button>
       </Stack>
 
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell><b>{t("products.name")}</b></TableCell>
-            <TableCell><b>{t("products.price")}</b></TableCell>
-            <TableCell><b>{t("products.quantity")}</b></TableCell>
-            <TableCell align="right"><b>{t("products.actions")}</b></TableCell>
-          </TableRow>
-        </TableHead>
-
-        <TableBody>
-          {products.map((p) => (
-            <TableRow key={p.id}>
-              <TableCell>{p.name}</TableCell>
-              <TableCell>{Number(p.price).toFixed(2)}</TableCell>
-              <TableCell>{p.quantity}</TableCell>
+      <TableContainer component={Paper} variant="outlined">
+        <Table sx={{ width: "100%" }}>
+          <TableHead>
+            <TableRow>
+              <TableCell>
+                <b>{t("products.name")}</b>
+              </TableCell>
+              <TableCell>
+                <b>{t("products.price")}</b>
+              </TableCell>
+              <TableCell>
+                <b>{t("products.quantity")}</b>
+              </TableCell>
               <TableCell align="right">
-                <IconButton
-                  aria-label={t("buttons.edit")}
-                  onClick={() => navigate(`/products/${p.id}/edit`)}
-                >
-                  <EditIcon />
-                </IconButton>
-                <IconButton
-                  aria-label={t("buttons.delete")}
-                  onClick={() => setToDelete(p)}
-                >
-                  <DeleteIcon />
-                </IconButton>
+                <b>{t("products.actions")}</b>
               </TableCell>
             </TableRow>
-          ))}
+          </TableHead>
 
-          {products.length === 0 && (
-            <TableRow>
-              <TableCell colSpan={4}>{t("products.noProducts")}</TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+          <TableBody>
+            {products.map((p) => (
+              <TableRow key={p.id} hover>
+                <TableCell>{p.name}</TableCell>
+                <TableCell>{Number(p.price).toFixed(2)}</TableCell>
+                <TableCell>{p.quantity}</TableCell>
+                <TableCell align="right">
+                  <IconButton aria-label={t("buttons.edit")} onClick={() => navigate(`/products/${p.id}/edit`)}>
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton aria-label={t("buttons.delete")} onClick={() => setToDelete(p)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+
+            {products.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={4}>{t("products.noProducts")}</TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
 
       <Dialog open={!!toDelete} onClose={() => setToDelete(null)}>
         <DialogTitle>{t("products.confirmDeletionTitle")}</DialogTitle>
@@ -176,16 +186,11 @@ export default function ProductsPage() {
           <Button onClick={() => setToDelete(null)} disabled={deleting}>
             {t("buttons.cancel")}
           </Button>
-          <Button
-            variant="contained"
-            color="error"
-            disabled={deleting}
-            onClick={confirmDelete}
-          >
+          <Button variant="contained" color="error" disabled={deleting} onClick={confirmDelete}>
             {t("buttons.delete")}
           </Button>
         </DialogActions>
       </Dialog>
-    </Container>
+    </PageShell>
   );
 }

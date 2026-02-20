@@ -105,6 +105,7 @@ Use these credentials for the local development database:
 | Role | Username | Password |
 | --- | --- | --- |
 | **Admin** | `admin` | `Admin12345!` |
+| **User** | `Test1` | `Test123` |
 
 > [!IMPORTANT]
 > If you created the admin manually in Postgres, ensure the bcrypt hash matches the password provided above.
@@ -151,4 +152,5 @@ Use these credentials for the local development database:
 4. **Run Tests:** `cd frontend && npm run test`
 
 ---
+
 

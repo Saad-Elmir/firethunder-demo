@@ -8,7 +8,7 @@ import {
 import { ErrorLink } from "@apollo/client/link/error";
 
 import i18n from "../i18n";
-import { toast } from "../ui/toast";
+import { toast } from "../ui/toastBus";
 import { clearToken } from "../auth";
 import { isUnauthorized, isForbidden } from "../graphql/errors";
 

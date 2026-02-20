@@ -1,15 +1,8 @@
-import React, { createContext, useContext, useMemo, useState } from "react";
+/* eslint-disable react-refresh/only-export-components */
+import React, { useContext, useMemo, useState } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-
-type ThemeMode = "light" | "dark";
-
-type ThemeCtx = {
-  mode: ThemeMode;
-  toggleMode: () => void;
-};
-
-const ThemeContext = createContext<ThemeCtx | null>(null);
+import { ThemeContext, type ThemeMode } from "./themeContext";
 
 export function useAppTheme() {
   const ctx = useContext(ThemeContext);
@@ -18,10 +11,9 @@ export function useAppTheme() {
 }
 
 export function AppThemeProvider({ children }: { children: React.ReactNode }) {
-  const [mode, setMode] = useState<ThemeMode>(() => {
-  const saved = localStorage.getItem("theme");
-  return saved === "dark" || saved === "light" ? saved : "light";
-});
+  const [mode, setMode] = useState<ThemeMode>(
+    (localStorage.getItem("theme") as ThemeMode) || "light"
+  );
 
   const toggleMode = () => {
     setMode((prev) => {

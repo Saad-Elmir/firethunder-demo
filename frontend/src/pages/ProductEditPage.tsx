@@ -138,13 +138,15 @@ export default function ProductEditPage() {
 
       showToast(t("toast.productUpdated"), "success");
       navigate("/products", { replace: true });
-    } catch (e: any) {
-      const msg = String(e?.message ?? "");
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : String(e);
+
       if (isUnauthorized(msg)) {
-        clearToken();
-        navigate("/login", { replace: true });
-        return;
+         clearToken();
+         navigate("/login", { replace: true });
+         return;
       }
+
       showToast(t("toast.updateFailed"), "error");
     }
   };
@@ -226,6 +228,7 @@ export default function ProductEditPage() {
             variant="contained"
             onClick={handleSubmit(onSubmit)}
             disabled={!isValid || saving || isSubmitting}
+            startIcon={saving ? <CircularProgress size={18} color="inherit" /> : undefined}
           >
             {t("buttons.save")}
           </Button>

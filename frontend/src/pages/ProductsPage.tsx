@@ -43,6 +43,13 @@ type ProductsData = { products: Product[] };
 type DeleteVars = { id: string };
 type DeleteData = { deleteProduct: boolean };
 
+function PageShell({ children }: { children: React.ReactNode }) {
+    return (
+      <Container maxWidth={false} disableGutters sx={{ py: 4, px: 3 }}>
+        <Box sx={{ width: "100%", maxWidth: 1100, mx: "auto" }}>{children}</Box>
+      </Container>
+    );
+  }
 export default function ProductsPage() {
   const navigate = useNavigate();
   const { showToast } = useToast();
@@ -79,8 +86,8 @@ export default function ProductsPage() {
       showToast(t("toast.productDeleted"), "success");
       setToDelete(null);
       await refetch();
-    } catch (e: any) {
-      const msg = e?.message || "";
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : String(e);
 
       if (isUnauthorized(msg)) {
         clearToken();
@@ -98,11 +105,7 @@ export default function ProductsPage() {
   };
 
   //  Container full width + contenu centré large
-  const PageShell = ({ children }: { children: React.ReactNode }) => (
-    <Container maxWidth={false} disableGutters sx={{ py: 4, px: 3 }}>
-      <Box sx={{ width: "100%", maxWidth: 1100, mx: "auto" }}>{children}</Box>
-    </Container>
-  );
+  
 
   if (loading) {
     return (

@@ -13,14 +13,12 @@ import { useToast } from "../ui/toast";
 import { isUnauthorized } from "../graphql/errors";
 import { clearToken } from "../auth";
 
-const CreateVarsSchema = z.object({
-  name: z.string().min(2),
-  description: z.string().optional(),
-  price: z.number().min(0),
-  quantity: z.number().int().min(0),
-});
-
-type FormValues = z.infer<typeof CreateVarsSchema>;
+type FormValues = {
+  name: string;
+  description?: string;
+  price: number;
+  quantity: number;
+};
 
 type CreateVars = {
   input: {
@@ -77,8 +75,8 @@ export default function ProductNewPage() {
 
       showToast(t("toast.productCreated"), "success");
       navigate("/products", { replace: true });
-    } catch (e: any) {
-      const msg = String(e?.message ?? "");
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : String(e);
       if (isUnauthorized(msg)) {
         clearToken();
         navigate("/login", { replace: true });

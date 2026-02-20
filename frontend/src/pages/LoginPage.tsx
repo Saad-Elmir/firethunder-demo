@@ -88,23 +88,23 @@ export default function LoginPage() {
 
       setToken(token);
       navigate("/products", { replace: true });
-    } catch (e: any) {
-      const msg = String(e?.message ?? "").toLowerCase();
+    }  catch (e: unknown) {
+       const msg = (e instanceof Error ? e.message : String(e)).toLowerCase();
 
-      if (
-        msg.includes("failed to fetch") ||
-        msg.includes("fetch failed") ||
-        msg.includes("network") ||
-        msg.includes("econnrefused") ||
-        msg.includes("server unreachable")
-      ) {
-        showToast(t("toast.serverUnreachable"), "error");
-        return;
-      }
+       if (
+          msg.includes("failed to fetch") ||
+          msg.includes("fetch failed") ||
+          msg.includes("network") ||
+          msg.includes("econnrefused") ||
+          msg.includes("server unreachable")
+       ) {
+          showToast(t("toast.serverUnreachable"), "error");
+          return;
+       }
 
-      if (msg.includes("invalid credentials")) {
-        showToast(t("toast.invalidCredentials"), "error");
-        return;
+       if (msg.includes("invalid credentials")) {
+          showToast(t("toast.invalidCredentials"), "error");
+          return;
       }
 
       showToast(t("toast.invalidCredentials"), "error");

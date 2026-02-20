@@ -1,14 +1,14 @@
 import { Routes, Route } from "react-router-dom";
 import { MockedProvider } from "@apollo/client/testing/react";
+import type { DocumentNode } from "graphql";
 
 import ProductNewPage from "../pages/ProductNewPage";
 import ProductEditPage from "../pages/ProductEditPage";
 import { renderWithProviders } from "./testUtils";
 
-// type léger compatible apollo mocks
 type ApolloMock = {
-  request: { query: any; variables?: Record<string, any> };
-  result?: { data?: any };
+  request: { query: DocumentNode; variables?: Record<string, unknown> };
+  result?: { data?: unknown };
   error?: Error;
 };
 
@@ -17,14 +17,9 @@ type Options = {
   mocks?: ApolloMock[];
 };
 
-/**
- * Helper commun pour tester ProductNewPage & ProductEditPage
- * - wrap Apollo MockedProvider
- * - wrap Router (routes nécessaires)
- * - wrap providers via renderWithProviders
- */
 export function renderProductForm(kind: "new" | "edit", options: Options = {}) {
-  const route = options.route ?? (kind === "new" ? "/products/new" : "/products/p1/edit");
+  const route =
+    options.route ?? (kind === "new" ? "/products/new" : "/products/p1/edit");
   const mocks = options.mocks ?? [];
 
   return renderWithProviders(

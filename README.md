@@ -20,7 +20,7 @@ Make sure you have:
 ## 2. Clone the repository
 
 ```bash
-git clone <https://github.com/Saad-Elmir/firethunder-demo>
+git clone https://github.com/Saad-Elmir/firethunder-demo
 cd firethunder-demo
 ```
 
@@ -151,3 +151,4 @@ Use these credentials for the local development database:
 4. **Run Tests:** `cd frontend && npm run test`
 
 ---
+

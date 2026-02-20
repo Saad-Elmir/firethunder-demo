@@ -186,7 +186,7 @@ export default function ProductsPage() {
           <Button onClick={() => setToDelete(null)} disabled={deleting}>
             {t("buttons.cancel")}
           </Button>
-          <Button variant="contained" color="error" disabled={deleting} onClick={confirmDelete}>
+          <Button variant="contained" color="error" disabled={deleting} onClick={confirmDelete} startIcon={deleting ? <CircularProgress size={18} color="inherit" /> : undefined}>
             {t("buttons.delete")}
           </Button>
         </DialogActions>

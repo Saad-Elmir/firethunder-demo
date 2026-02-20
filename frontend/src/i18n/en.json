@@ -45,7 +45,8 @@
     "productCreated": "Product created successfully",
     "productUpdated": "Product updated successfully",
     "productDeleted": "Product deleted",
-    "notAllowedDelete": "You are not allowed to delete products"
+    "notAllowedDelete": "You are not allowed to delete products",
+    "accessDenied": "Access denied"
   },
   "validation": {
     "usernameRequired": "username required",

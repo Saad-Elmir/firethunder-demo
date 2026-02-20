@@ -52,7 +52,7 @@ export default function ProtectedLayout() {
 
   const onToggleLang = () => {
     const next = getLang() === "fr" ? "en" : "fr";
-    setLang(next); // ✅ localStorage + i18n.changeLanguage
+    setLang(next); //  localStorage + i18n.changeLanguage
   };
 
   const isProducts = location.pathname.startsWith("/products");

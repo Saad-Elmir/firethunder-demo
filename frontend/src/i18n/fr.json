@@ -45,7 +45,8 @@
     "productCreated": "Produit créé avec succès",
     "productUpdated": "Produit mis à jour avec succès",
     "productDeleted": "Produit supprimé",
-    "notAllowedDelete": "Vous n'êtes pas autorisé à supprimer des produits"
+    "notAllowedDelete": "Vous n'êtes pas autorisé à supprimer des produits",
+    "accessDenied": "Accès refusé"
   },
   "validation": {
     "usernameRequired": "nom d'utilisateur requis",

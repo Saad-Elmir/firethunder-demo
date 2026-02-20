@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { Snackbar, Alert } from "@mui/material";
 
 type ToastSeverity = "success" | "error" | "info" | "warning";
@@ -8,6 +8,15 @@ type ToastCtx = {
 };
 
 const ToastContext = createContext<ToastCtx | null>(null);
+
+// --- Pont global (utilisable hors React, ex: Apollo ErrorLink)
+let _showToast: ToastCtx["showToast"] | null = null;
+
+export const toast = {
+  show: (message: string, severity: ToastSeverity = "info") => {
+    _showToast?.(message, severity);
+  },
+};
 
 export function useToast() {
   const ctx = useContext(ToastContext);
@@ -26,11 +35,28 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     setOpen(true);
   };
 
+  // expose showToast au pont global
+  useEffect(() => {
+    _showToast = showToast;
+    return () => {
+      _showToast = null;
+    };
+  }, []);
+
   return (
     <ToastContext.Provider value={{ showToast }}>
       {children}
-      <Snackbar open={open} autoHideDuration={2500} onClose={() => setOpen(false)}>
-        <Alert severity={severity} onClose={() => setOpen(false)} sx={{ width: "100%" }}>
+      <Snackbar
+        open={open}
+        autoHideDuration={2500}
+        onClose={() => setOpen(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          severity={severity}
+          onClose={() => setOpen(false)}
+          sx={{ width: "100%" }}
+        >
           {message}
         </Alert>
       </Snackbar>

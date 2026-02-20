@@ -8,6 +8,7 @@ import {
   Stack,
   Alert,
   Paper,
+  CircularProgress,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -158,7 +159,7 @@ export default function LoginPage() {
               disabled={disabled}
               onClick={handleSubmit(onSubmit)}
             >
-              {loading ? "..." : t("auth.submit")}
+              {loading ? <CircularProgress size={22} /> : t("auth.submit")}
             </Button>
 
             {!isValid && (

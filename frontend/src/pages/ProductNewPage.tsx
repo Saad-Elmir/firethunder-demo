@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Container, Typography, TextField, Button, Stack } from "@mui/material";
+import { Container, Typography, TextField, Button, Stack, CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
@@ -130,12 +130,21 @@ export default function ProductNewPage() {
         />
 
         <Stack direction="row" spacing={2}>
-          <Button variant="outlined" onClick={() => navigate("/products")} disabled={loading || isSubmitting}>
-            {t("buttons.cancel")}
+          <Button
+              variant="outlined"
+              onClick={() => navigate("/products")}
+              disabled={loading || isSubmitting}
+>
+  {t("buttons.cancel")}
           </Button>
 
-          <Button variant="contained" onClick={handleSubmit(onSubmit)} disabled={!isValid || loading || isSubmitting}>
-            {t("buttons.create")}
+          <Button
+              variant="contained"
+              onClick={handleSubmit(onSubmit)}
+              disabled={!isValid || loading || isSubmitting}
+              startIcon={loading ? <CircularProgress size={18} color="inherit" /> : undefined}
+          > 
+             {t("buttons.create")}
           </Button>
         </Stack>
       </Stack>

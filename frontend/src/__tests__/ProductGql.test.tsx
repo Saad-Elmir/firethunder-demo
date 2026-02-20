@@ -95,7 +95,15 @@ const mocks: MockedResponse[] = [
     result: {
       data: {
         products: [
-          { id: "p1", name: "Laptop", description: "Lenovo", price: "10.00", quantity: 1, createdAt: "", updatedAt: "" },
+          {
+            id: "p1",
+            name: "Laptop",
+            description: "Lenovo",
+            price: "10.00",
+            quantity: 1,
+            createdAt: "",
+            updatedAt: "",
+          },
         ],
       },
     },
@@ -106,7 +114,15 @@ const mocks: MockedResponse[] = [
       variables: { input: { name: "Laptop", description: "Lenovo", price: 10, quantity: 1 } },
     },
     result: {
-      data: { createProduct: { id: "new1", name: "Laptop", description: "Lenovo", price: "10.00", quantity: 1 } },
+      data: {
+        createProduct: {
+          id: "new1",
+          name: "Laptop",
+          description: "Lenovo",
+          price: "10.00",
+          quantity: 1,
+        },
+      },
     },
   },
   {
@@ -115,7 +131,15 @@ const mocks: MockedResponse[] = [
       variables: { id: "p1", input: { name: "Laptop2", price: 20, quantity: 2 } },
     },
     result: {
-      data: { updateProduct: { id: "p1", name: "Laptop2", description: "Lenovo", price: "20.00", quantity: 2 } },
+      data: {
+        updateProduct: {
+          id: "p1",
+          name: "Laptop2",
+          description: "Lenovo",
+          price: "20.00",
+          quantity: 2,
+        },
+      },
     },
   },
   {

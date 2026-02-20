@@ -13,14 +13,13 @@ import { AppThemeProvider } from "./theme";
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ApolloProvider client={apolloClient}>
-  <AppThemeProvider>
-    <ToastProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </ToastProvider>
-  </AppThemeProvider>
-</ApolloProvider>
-
+      <AppThemeProvider>
+        <ToastProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </ToastProvider>
+      </AppThemeProvider>
+    </ApolloProvider>
   </React.StrictMode>
 );

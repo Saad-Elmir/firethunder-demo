@@ -37,4 +37,3 @@ export const toggleLang = (): "en" | "fr" => {
 };
 
 export default i18n;
-

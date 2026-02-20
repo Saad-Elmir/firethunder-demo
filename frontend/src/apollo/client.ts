@@ -1,10 +1,4 @@
-import {
-  ApolloClient,
-  InMemoryCache,
-  HttpLink,
-  ApolloLink,
-  from,
-} from "@apollo/client";
+import { ApolloClient, InMemoryCache, HttpLink, ApolloLink, from } from "@apollo/client";
 import { ErrorLink } from "@apollo/client/link/error";
 
 import i18n from "../i18n";
@@ -51,7 +45,7 @@ const errorLink = new ErrorLink(({ error }) => {
   }
 
   // 2) GraphQL errors (Unauthorized / Forbidden)
-  const gqlErrors = hasGraphQLErrors(error) ? error.graphQLErrors ?? [] : [];
+  const gqlErrors = hasGraphQLErrors(error) ? (error.graphQLErrors ?? []) : [];
 
   for (const ge of gqlErrors) {
     const msg = ge?.message ?? "";

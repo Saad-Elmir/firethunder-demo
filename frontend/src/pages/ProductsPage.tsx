@@ -44,12 +44,12 @@ type DeleteVars = { id: string };
 type DeleteData = { deleteProduct: boolean };
 
 function PageShell({ children }: { children: React.ReactNode }) {
-    return (
-      <Container maxWidth={false} disableGutters sx={{ py: 4, px: 3 }}>
-        <Box sx={{ width: "100%", maxWidth: 1100, mx: "auto" }}>{children}</Box>
-      </Container>
-    );
-  }
+  return (
+    <Container maxWidth={false} disableGutters sx={{ py: 4, px: 3 }}>
+      <Box sx={{ width: "100%", maxWidth: 1100, mx: "auto" }}>{children}</Box>
+    </Container>
+  );
+}
 export default function ProductsPage() {
   const navigate = useNavigate();
   const { showToast } = useToast();
@@ -105,7 +105,6 @@ export default function ProductsPage() {
   };
 
   //  Container full width + contenu centré large
-  
 
   if (loading) {
     return (
@@ -130,7 +129,11 @@ export default function ProductsPage() {
     <PageShell>
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
         <Typography variant="h5">{t("products.title")}</Typography>
-        <Button variant="contained" startIcon={<AddIcon />} onClick={() => navigate("/products/new")}>
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={() => navigate("/products/new")}
+        >
           {t("products.new")}
         </Button>
       </Stack>
@@ -161,7 +164,10 @@ export default function ProductsPage() {
                 <TableCell>{Number(p.price).toFixed(2)}</TableCell>
                 <TableCell>{p.quantity}</TableCell>
                 <TableCell align="right">
-                  <IconButton aria-label={t("buttons.edit")} onClick={() => navigate(`/products/${p.id}/edit`)}>
+                  <IconButton
+                    aria-label={t("buttons.edit")}
+                    onClick={() => navigate(`/products/${p.id}/edit`)}
+                  >
                     <EditIcon />
                   </IconButton>
                   <IconButton aria-label={t("buttons.delete")} onClick={() => setToDelete(p)}>
@@ -189,7 +195,13 @@ export default function ProductsPage() {
           <Button onClick={() => setToDelete(null)} disabled={deleting}>
             {t("buttons.cancel")}
           </Button>
-          <Button variant="contained" color="error" disabled={deleting} onClick={confirmDelete} startIcon={deleting ? <CircularProgress size={18} color="inherit" /> : undefined}>
+          <Button
+            variant="contained"
+            color="error"
+            disabled={deleting}
+            onClick={confirmDelete}
+            startIcon={deleting ? <CircularProgress size={18} color="inherit" /> : undefined}
+          >
             {t("buttons.delete")}
           </Button>
         </DialogActions>

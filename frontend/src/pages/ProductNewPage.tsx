@@ -129,20 +129,20 @@ export default function ProductNewPage() {
 
         <Stack direction="row" spacing={2}>
           <Button
-              variant="outlined"
-              onClick={() => navigate("/products")}
-              disabled={loading || isSubmitting}
->
-  {t("buttons.cancel")}
+            variant="outlined"
+            onClick={() => navigate("/products")}
+            disabled={loading || isSubmitting}
+          >
+            {t("buttons.cancel")}
           </Button>
 
           <Button
-              variant="contained"
-              onClick={handleSubmit(onSubmit)}
-              disabled={!isValid || loading || isSubmitting}
-              startIcon={loading ? <CircularProgress size={18} color="inherit" /> : undefined}
-          > 
-             {t("buttons.create")}
+            variant="contained"
+            onClick={handleSubmit(onSubmit)}
+            disabled={!isValid || loading || isSubmitting}
+            startIcon={loading ? <CircularProgress size={18} color="inherit" /> : undefined}
+          >
+            {t("buttons.create")}
           </Button>
         </Stack>
       </Stack>

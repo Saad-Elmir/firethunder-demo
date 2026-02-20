@@ -1,4 +1,3 @@
-
 import { describe, it, expect, beforeEach } from "vitest";
 import { setToken, getToken, clearToken, isLoggedIn, TOKEN_KEY } from "./authStorage";
 

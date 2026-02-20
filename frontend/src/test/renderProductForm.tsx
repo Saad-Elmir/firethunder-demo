@@ -18,8 +18,7 @@ type Options = {
 };
 
 export function renderProductForm(kind: "new" | "edit", options: Options = {}) {
-  const route =
-    options.route ?? (kind === "new" ? "/products/new" : "/products/p1/edit");
+  const route = options.route ?? (kind === "new" ? "/products/new" : "/products/p1/edit");
   const mocks = options.mocks ?? [];
 
   return renderWithProviders(

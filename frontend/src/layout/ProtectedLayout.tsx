@@ -61,33 +61,27 @@ export default function ProtectedLayout() {
     <Box sx={{ minHeight: "100vh" }}>
       <AppBar position="static">
         <Container maxWidth={false} disableGutters sx={{ px: 2 }}>
-           <Toolbar disableGutters>
-             <IconButton
-                color="inherit"
-                edge="start"
-                onClick={() => setOpen(true)}
-                sx={{ mr: 2 }}
-              >
-                <MenuIcon />
+          <Toolbar disableGutters>
+            <IconButton color="inherit" edge="start" onClick={() => setOpen(true)} sx={{ mr: 2 }}>
+              <MenuIcon />
+            </IconButton>
+
+            <Typography variant="h6" sx={{ flexGrow: 1 }}>
+              {t("app.title")}
+            </Typography>
+
+            <Typography variant="body2" sx={{ opacity: 0.9, mr: 1 }}>
+              {lang}
+            </Typography>
+
+            <Tooltip title={mode === "dark" ? "Light mode" : "Dark mode"}>
+              <IconButton color="inherit" onClick={toggleMode}>
+                {mode === "dark" ? <LightModeIcon /> : <DarkModeIcon />}
               </IconButton>
-
-              <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                 {t("app.title")}
-              </Typography>
-
-              <Typography variant="body2" sx={{ opacity: 0.9, mr: 1 }}>
-                {lang}
-              </Typography>
-
-              <Tooltip title={mode === "dark" ? "Light mode" : "Dark mode"}>
-                <IconButton color="inherit" onClick={toggleMode}>
-                  {mode === "dark" ? <LightModeIcon /> : <DarkModeIcon />}
-                </IconButton>
-              </Tooltip>
-            </Toolbar>
+            </Tooltip>
+          </Toolbar>
         </Container>
       </AppBar>
-
 
       <Drawer open={open} onClose={() => setOpen(false)}>
         <Box sx={{ width: 280 }} role="presentation">

@@ -42,6 +42,3 @@ test("redirects to login when not authed", () => {
   // page login affiche un <Typography variant="h5">Login</Typography>
   expect(screen.getByText("Login")).toBeInTheDocument();
 });
-
-
-

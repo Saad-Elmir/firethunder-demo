@@ -118,7 +118,7 @@ describe("ProductsPage", () => {
 
     // Back again to products to test delete flow
     renderWithProviders(
-      <MockedProvider mocks={mocks} >
+      <MockedProvider mocks={mocks}>
         <Routes>
           <Route path="/products" element={<ProductsPage />} />
         </Routes>

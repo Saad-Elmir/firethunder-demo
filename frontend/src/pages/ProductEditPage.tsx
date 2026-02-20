@@ -1,12 +1,5 @@
 import { useEffect, useMemo } from "react";
-import {
-  Container,
-  Typography,
-  TextField,
-  Button,
-  Stack,
-  CircularProgress,
-} from "@mui/material";
+import { Container, Typography, TextField, Button, Stack, CircularProgress } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client/react";
 import { useForm } from "react-hook-form";
@@ -83,14 +76,15 @@ export default function ProductEditPage() {
   });
 
   // Query product
-  const { data, loading, error: queryError } = useQuery<ByIdData, ByIdVars>(
-    PRODUCT_BY_ID_QUERY,
-    {
-      variables: { id: id ?? "" },
-      skip: !id,
-      fetchPolicy: "no-cache",
-    }
-  );
+  const {
+    data,
+    loading,
+    error: queryError,
+  } = useQuery<ByIdData, ByIdVars>(PRODUCT_BY_ID_QUERY, {
+    variables: { id: id ?? "" },
+    skip: !id,
+    fetchPolicy: "no-cache",
+  });
 
   //  Gestion safe des erreurs query
   useEffect(() => {
@@ -142,9 +136,9 @@ export default function ProductEditPage() {
       const msg = e instanceof Error ? e.message : String(e);
 
       if (isUnauthorized(msg)) {
-         clearToken();
-         navigate("/login", { replace: true });
-         return;
+        clearToken();
+        navigate("/login", { replace: true });
+        return;
       }
 
       showToast(t("toast.updateFailed"), "error");
